@@ -1,87 +1,61 @@
+import React, {useState} from "react";
 
-
-
-import React, {useState} from 'react';
-import './App.css';
-import {TaskType, Todolist} from './Todolist';
-import {v1} from 'uuid';
-
-export type FilterValuesType = "all" | "active" | "completed";
-
-type TodolistsType ={
-  id: string;
-  title: string;
-  filter: FilterValuesType;
+type samuraiType = {
+    id: string
+    name: string
+    status: "online" | "offline"
 }
-type TasksType={
-  [key: string]: Array<TaskType>
+type CourseNameType = "HTML"|"JS"|"React"|"Redux"|"HomeWorks"
+type CourseType = {
+    name: CourseNameType
+    mentor: string
+    isDone: boolean
+}
+type TechnologiesType = {
+    [userID: string]: Array<CourseType>
 }
 
-function App() {
-  let todolistID1 = v1() // '12ed-1212-dfed-wqqwqw'
-  let todolistID2 = v1() // '12ed-1212-dfed-wqqwqw'
+const samuraiID_1 = "64jf-87kg"
+const samuraiID_2 = "90lg-34ks"
+const samuraiID_3 = "12jm-05fd"
 
-  let [todolists, setTodolists] = useState<Array<TodolistsType>>([
-    {id: todolistID1, title: "What to learn", filter: "all"},
-    {id: todolistID2, title: "What to buy", filter: "all"},
-  ])
+export const samurai: Array<samuraiType> = [
+    {id: samuraiID_1, name: "Bob", status: "online"},
+    {id: samuraiID_2, name: "Alex", status: "offline"},
+    {id: samuraiID_3, name: "Ann", status: "offline"},
+]
 
-  let [tasks, setTasks] = useState<TasksType>({
-    [todolistID1]: [
-      {id: v1(), title: 'HTML&CSS', isDone: true},
-      {id: v1(), title: 'JS', isDone: true},
-      {id: v1(), title: 'ReactJS', isDone: false},
-      {id: v1(), title: 'Rest API', isDone: false},
-      {id: v1(), title: 'Graph SQL', isDone: false},
-
+export const technologies: TechnologiesType = {
+    [samuraiID_1]: [
+        {name: "HTML", mentor: "Svetlana", isDone: true},
+        {name: "JS", mentor: "Viktor", isDone: true},
+        {name: "React", mentor: "Dmitrij", isDone: false},
+        {name: "Redux", mentor: "Valera", isDone: false},
+        {name: "HomeWorks", mentor: "Ignat", isDone: true},
     ],
-    [todolistID2]: [
-      {id: v1(), title: 'Milk', isDone: true},
-      {id: v1(), title: 'Fruits', isDone: true},
-      {id: v1(), title: 'Nuts', isDone: true},
-      {id: v1(), title: 'Bread', isDone: false},
-      {id: v1(), title: 'Sugar', isDone: false},
+    [samuraiID_2]: [
+        {name: "HTML", mentor: "Svetlana", isDone: true},
+        {name: "JS", mentor: "Viktor", isDone: true},
+        {name: "React", mentor: "Dmitrij", isDone: true},
+        {name: "Redux", mentor: "Valera", isDone: false},
+        {name: "HomeWorks", mentor: "Ignat", isDone: true},
     ],
-    [todolistID2]: [
-      {id: v1(), title: 'Milk', isDone: true},
-      {id: v1(), title: 'Fruits', isDone: true},
-      {id: v1(), title: 'Nuts', isDone: true},
-      {id: v1(), title: 'Bread', isDone: false},
-      {id: v1(), title: 'Sugar', isDone: false},
-    ]
-  })
-  function removeTask(todolistID: string, taskID: string) {
-    setTasks({...tasks, [todolistID]:tasks[todolistID].filter(el => el.id !== taskID)})
-  }
-
-  console.log(tasks['12ed-1212-dfed-wqqwqw'])
-  console.log(tasks['todolistID2'])
-  console.log(tasks)
-  function changeStatus(todolistID: string, taskId: string, newIsDone: boolean) {
-    setTasks({...tasks, [todolistID2]:tasks[todolistID2].map(el => el.id === taskId ? {...el, isDone:newIsDone} : el)})
-  }
-
-  return (
-      <div className="App">
-        {todolists.map(el=>{
-          let tasksForTodolist = tasks[el.id];
-          if (el.filter === "active") {
-            tasksForTodolist = tasks[el.id].filter(t => !t.isDone);
-          }
-          if (el.filter === "completed") {
-            tasksForTodolist = tasks[el.id].filter(t => t.isDone);
-          }
-          return <Todolist
-              key={el.id}
-              todolistID={el.id}
-              title={el.title}
-              tasks={tasksForTodolist}
-              removeTask={removeTask}
-              changeTaskStatus={changeStatus}
-          />
-        })}
-      </div>
-  );
+    [samuraiID_3]: [
+        {name: "HTML", mentor: "Svetlana", isDone: true},
+        {name: "JS", mentor: "Viktor", isDone: true},
+        {name: "React", mentor: "Dmitrij", isDone: false},
+        {name: "Redux", mentor: "Valera", isDone: false},
+        {name: "HomeWorks", mentor: "Ignat", isDone: false},
+    ],
 }
 
-export default App;
+export const updateCourseStatus = (samuraiID: string, name: CourseNameType, isDone: boolean) => {
+    return {...technologies,
+        [samuraiID]: technologies[samuraiID].map(c => c.name === name ? {...c, isDone} : c)
+    }
+}
+// Дан список самураев из инкубатора и структура, хранящая данные о курсах,
+// которые самурай уже прошёл, а так же о тех курсах, которые ему ещё предстоит пройти.
+// Так же дана функция updateCourseStatus,
+// которая позволяет отметить курс как пройденный самураем или снять такую отметку
+// Что надо написать вместо ххх, чтобы функция работала корректно?
